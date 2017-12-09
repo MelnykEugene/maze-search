@@ -1,4 +1,4 @@
-public class MazeGenerator()
+public class MazeGenerator
         {
 private int wid;
 private int hei;
@@ -95,8 +95,7 @@ public void generateMaze(int starX, int starY)
 
 
 
-public void setupMaze()
-        {
+public void setupMaze(){
         generateMaze(1,1);
         for (int x = 0; x < wid; x++)
         {
