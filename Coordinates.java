@@ -1,7 +1,7 @@
 class Coordinates{
     public int x;
     public int y;
-    public Coordinates(xp,py){
+    public Coordinates(int xp, int py){
         x=xp;
         y=py;
     }

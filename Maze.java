@@ -1,4 +1,6 @@
-import java.Random;
+import java.util.Random;
+import java.util.Scanner;
+
 public class Maze
 {   /*
     imaze is a integer matrix with values meaning the following:
@@ -41,11 +43,11 @@ public class Maze
     }
 
 
-    public Maze(width,height,xstart,ystart,xfinish,yfinish){
-        maze=new Cell[width,height];
+    public Maze(int width,int height,int xstart,int ystart, int xfinish, int yfinish){
+        Cell[][] imaze=new Cell[width][height];
         for (int x =0; x< width; x++){
             for (int y =0; y< height; y++){
-                maze[x,y]==new Cell(0,new Coordinates(x,y));
+                imaze[x][y]==new Cell(0,new Coordinates(x,y));
             }
         }
     }
@@ -54,7 +56,7 @@ public class Maze
     }
 
     public generateRandom(){
-        rand=new Random();
+        Random rand=new Random();
         for (int x =0; x< width; x++){
             for (int y =0; y< height; y++){
                 wallOrNotWall=rand.nextInt();
