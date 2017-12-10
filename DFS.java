@@ -15,6 +15,7 @@ public class DFS extends SearchLab implements Searchable{
             runWorld();
         }
         else {
+            maze.imaze[maze.startingX][maze.startingY]=1;
             for (int k = -1; k < 2; k++) {
                 for (int l = -1; l < 2; l++) {
                     if (k == 0 && l == 0)
@@ -22,7 +23,7 @@ public class DFS extends SearchLab implements Searchable{
                     if (maze.imaze[maze.startingX + k][maze.startingY + l] == 0) {
                         a = Searchable(maze.startingX + k, maze.startingY + l);
                         if (a != 0) {
-                            maze.imaze[maze.startingX][maze.startingY]==3;
+                            maze.imaze[maze.startingX][maze.startingY]=3;
                             runWorld();
                             break;
                         }
@@ -37,12 +38,13 @@ public class DFS extends SearchLab implements Searchable{
     }
     public int Searchable(int startingX, int startingY){
     int a = 0;
+    maze.imaze[maze.startingX][maze.startingY]=1;
         for (int k = -1; k < 2; k++) {
             for (int l = -1; l < 2; l++) {
                 if (k == 0 && l == 0)
                     continue;
                 if(startingX == maze.endX && startingY == maze.endY) {
-                    maze.imaze[maze.startingX][maze.startingY]==3;
+                    maze.imaze[maze.startingX][maze.startingY]=3;
                     runWorld();
                     a = 1;
                     break;
@@ -61,6 +63,7 @@ public class DFS extends SearchLab implements Searchable{
                 break;
             }
         }
+        return a;
     }
     /*
         Changes the appearance of the maze according to the search status
