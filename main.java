@@ -1,10 +1,11 @@
 import java.io.FileNotFoundException;
 
-public class main  {
-    public static void main() throws FileNotFoundException {
-        Maze maze = new Maze();
+public class main{
+    public static void main(String[] argv) throws FileNotFoundException {
+        Maze maze = new Maze(10,10);
         maze.generateRandom();
         Visualization viz = new Visualization(maze);
-        Visualization.
+        viz.Initilize();
+        viz.shownew();
     }
 }

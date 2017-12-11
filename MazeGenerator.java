@@ -1,6 +1,6 @@
 import java.util.Random;
 import java.util.Scanner;
-
+/*
 public class MazeGenerator
 {
     private int wid;
@@ -122,3 +122,4 @@ public class MazeGenerator
         return imaze;
     }
 }
+*/

@@ -1,10 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
-
+/*
 public class DFS extends SearchLab implements Searchable{
-    /*
-    Constructor
-     */
     public DFS(Maze a){
         super(a);
     }
@@ -65,10 +62,9 @@ public class DFS extends SearchLab implements Searchable{
         }
         return a;
     }
-    /*
-        Changes the appearance of the maze according to the search status
-     */
+
     public void runWorld(){
         viz.display(maze.imaze);
     }
 }
+*/

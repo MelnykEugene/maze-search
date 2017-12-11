@@ -11,8 +11,8 @@ public class Visualization extends JPanel {
 
     int height;             // height of maze in cells
     int width;              // width of maze in cells
-    int IMAGEHEIGHT;        // height of the canvas
-    int IMAGEWIDTH;         // width of the canvas
+    int IMAGEHEIGHT=1050;        // height of the canvas
+    int IMAGEWIDTH=1680;         // width of the canvas
     String generateMethod;  // how to regenerate maze
     String solveMethod;     // how to solve maze
     Maze _maze;             // local copy of maze
@@ -30,6 +30,8 @@ public class Visualization extends JPanel {
         frame.pack();
         frame.setVisible(true);
         _maze = maze;
+        height=_maze.getHeight();
+        width=_maze.getWidth();
     }
     public Visualization(){
         this(null);
@@ -42,30 +44,19 @@ public class Visualization extends JPanel {
     }
 
 
-    public void display(Graphics g) {
+    private void display(Graphics g) {
         // clear screen
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, IMAGEWIDTH, IMAGEHEIGHT);
-
-        // iterate over cells and paint them in corresponding spot
-        for (int row = 0; row < row++;) {
-            for (int column = padding; column < _maze.getWidth() - padding; column++) {
-
-                Cell cell = _maze.getCell(row, column);
-                    int initx = (column - padding) * CellPixelSize;
-                    int inity = (row - padding) * CellPixelSize;
-                    if (cell._wasEverAlive) {
+        // iterate over cells and draw them in corresponding spot with color depending on state of the Cell;
+        for (int x = 0; x < width++;) {
+            for (int y = 0; y < height; y++) {
+                Cell cell = _maze.getCell(x, y);
+                    int initx = (x) * CellPixelSize;
+                    int inity = (y) * CellPixelSize;
                         g.setColor(new Color(193, 234, 170));
                         g.fillRect(initx + 1, inity + 1, CellPixelSize - 2, CellPixelSize - 2);
-                    }
-                    if (cell.isAlive()) {
-                        g.setColor(Color.BLUE);
-                        if (!cell._willBeAlive) {
-                            g.setColor(Color.RED); // or new Color(0,0,255,70)
-                            g.fillRect(initx + 1, inity + 1, CellPixelSize - 2, CellPixelSize - 2);
-                        }
-                        g.fillRect(initx + 1, inity + 1, CellPixelSize - 2, CellPixelSize - 2);
-                    }
+                        System.out.println(1);
             }
         }
     }
@@ -77,5 +68,11 @@ public class Visualization extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         display(g);
+    }
+
+    //selects color to paint a certain cell with
+    private Color chooseColor(Cell cello){
+        if (cello.type==0) return Color.WHITE;
+        else return Color.BLUE;
     }
 }

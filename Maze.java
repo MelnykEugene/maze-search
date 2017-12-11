@@ -18,7 +18,7 @@ public class Maze
     private int width;
     private int height;
 
-    public Maze() throws FileNotFoundException {
+    public Maze(String filename) throws FileNotFoundException {
         File given = new File("mazeherefillinlater");
         Scanner dataspec = new Scanner(given);
         int width = 0;
@@ -46,7 +46,7 @@ public class Maze
     }
 
 
-    public Maze(int width,int height,int xstart,int ystart, int xfinish, int yfinish){
+    public Maze(int pwidth,int pheight,int xstart,int ystart, int xfinish, int yfinish){
         Cell[][] imaze=new Cell[width][height];
         for (int x =0; x< width; x++){
             for (int y =0; y< height; y++){
@@ -55,6 +55,8 @@ public class Maze
         }
         start=new Coordinates(xstart,ystart);
         finish=new Coordinates(xfinish,yfinish);
+        this.height=pheight;
+        this.width=pwidth;
     }
 
     public Maze(int pwidth,int pheight){
