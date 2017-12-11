@@ -1,5 +1,7 @@
 import java.util.Random;
 import java.util.Scanner;
+import java.io.File;
+import java.io.FileNotFoundException;
 
 public class Maze
 {   /*
@@ -10,14 +12,15 @@ public class Maze
     8-end
     9-start
     */
-    private int[][] imaze;
+    private Cell[][] imaze;
     private Coordinates start;
     private Coordinates finish;
+    private int width;
+    private int height;
 
-    public Maze()
-    {
+    public Maze() throws FileNotFoundException {
         File given = new File("mazeherefillinlater");
-        Scanner detspec = new Scanner(given);
+        Scanner dataspec = new Scanner(given);
         int width = 0;
         int height = 0;
         while (dataspec.hasNextLine())
@@ -27,7 +30,7 @@ public class Maze
             height++;
         }
         Scanner mazescan = new Scanner(given);
-        int[][] maze= new int[width][height];
+        Cell[][] maze= new Cell[width][height];
         int currentLoc = 0;
         while (mazescan.hasNextLine())
         {
@@ -35,7 +38,7 @@ public class Maze
             for(int i = 0; i < maze.length; i++)
             {
                 char part = currentRow.charAt(i);
-                maze[currentLoc][i] = Character.getNumericValue(part);
+                maze[currentLoc][i] = new Cell(Character.getNumericValue(part),new Coordinates(currentLoc,i));
             }
             currentLoc++;
         }
@@ -47,26 +50,37 @@ public class Maze
         Cell[][] imaze=new Cell[width][height];
         for (int x =0; x< width; x++){
             for (int y =0; y< height; y++){
-                imaze[x][y]==new Cell(0,new Coordinates(x,y));
+                imaze[x][y]=new Cell(0,new Coordinates(x,y));
             }
         }
-    }
-    public Maze(width,height){
-        Maze(width,height,0,0,width-1,height-1);
+        start=new Coordinates(xstart,ystart);
+        finish=new Coordinates(xfinish,yfinish);
     }
 
-    public generateRandom(){
+    public Maze(int pwidth,int pheight){
+        this(pwidth,pheight,0,0,pwidth-1,pheight-1);
+    }
+
+    public void generateRandom(){
         Random rand=new Random();
         for (int x =0; x< width; x++){
             for (int y =0; y< height; y++){
-                wallOrNotWall=rand.nextInt();
-                maze[x,y]==new Cell(0,new Coordinates(x,y));
+                int wallOrNotWall=rand.nextInt(11)>5 ? 0 : 1;
+                imaze[x][y]=new Cell(wallOrNotWall,new Coordinates(x,y));
             }
         }
     }
 
-    public int[][] getMaze()
+    public Cell[][] getMaze()
     {
         return imaze;
+    }
+
+    public int getWidth(){
+        return width;
+    }
+
+    public int getHeight(){
+        return height;
     }
 }
