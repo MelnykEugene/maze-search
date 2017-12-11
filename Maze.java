@@ -12,7 +12,7 @@ public class Maze
     8-end
     9-start
     */
-    private Cell[][] imaze;
+    public Cell[][] imaze;
     private Coordinates start;
     private Coordinates finish;
     private int width;
@@ -47,7 +47,7 @@ public class Maze
 
 
     public Maze(int pwidth,int pheight,int xstart,int ystart, int xfinish, int yfinish){
-        Cell[][] imaze=new Cell[width][height];
+        imaze=new Cell[pwidth][pheight];
         for (int x =0; x< width; x++){
             for (int y =0; y< height; y++){
                 imaze[x][y]=new Cell(0,new Coordinates(x,y));
@@ -65,8 +65,8 @@ public class Maze
 
     public void generateRandom(){
         Random rand=new Random();
-        for (int x =0; x< width; x++){
-            for (int y =0; y< height; y++){
+        for (int x = 0; x < width; x++){
+            for (int y = 0; y < height; y++){
                 int wallOrNotWall=rand.nextInt(11)>5 ? 0 : 1;
                 imaze[x][y]=new Cell(wallOrNotWall,new Coordinates(x,y));
             }

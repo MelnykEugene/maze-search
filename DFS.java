@@ -1,13 +1,13 @@
 import java.util.ArrayList;
 import java.util.List;
-/*
+
 public class DFS extends SearchLab implements Searchable{
     public DFS(Maze a){
         super(a);
     }
     public void Searchable(){
         int a;
-        if(maze.startingX == maze.endX && maze.startingY == maze.endY) {
+        if(maze.start.x == maze.endX && maze.startingY == maze.endY) {
             maze.imaze[maze.startingX][maze.startingY]==3;
             runWorld();
         }
@@ -67,4 +67,3 @@ public class DFS extends SearchLab implements Searchable{
         viz.display(maze.imaze);
     }
 }
-*/

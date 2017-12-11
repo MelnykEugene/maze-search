@@ -23,7 +23,7 @@ public class Visualization extends JPanel {
         //_maze = maze;
         //int height = _maze.getHeight();
         //int width = _maze.getWidth();
-        this.setPreferredSize(new Dimension(width, height));
+        this.setPreferredSize(new Dimension(IMAGEWIDTH, IMAGEHEIGHT));
         JFrame frame = new JFrame("life");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(this);
@@ -39,7 +39,7 @@ public class Visualization extends JPanel {
 
     public void Initilize(){
         // calculate the size of one cell on screen
-        int CellPixelSize = Math.min(IMAGEHEIGHT/height,IMAGEWIDTH/width);
+        CellPixelSize = Math.min(IMAGEHEIGHT/height,IMAGEWIDTH/width);
         CellPixelSize=Math.min(CellPixelSize,100);
     }
 
@@ -49,14 +49,14 @@ public class Visualization extends JPanel {
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, IMAGEWIDTH, IMAGEHEIGHT);
         // iterate over cells and draw them in corresponding spot with color depending on state of the Cell;
-        for (int x = 0; x < width++;) {
+        for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 Cell cell = _maze.getCell(x, y);
-                    int initx = (x) * CellPixelSize;
-                    int inity = (y) * CellPixelSize;
-                        g.setColor(new Color(193, 234, 170));
-                        g.fillRect(initx + 1, inity + 1, CellPixelSize - 2, CellPixelSize - 2);
-                        System.out.println(1);
+                int initx = (x) * CellPixelSize;
+                int inity = (y) * CellPixelSize;
+                //System.out.println(initx);
+                g.setColor(chooseColor(cell));
+                g.fillRect(initx + 1, inity + 1, CellPixelSize - 2, CellPixelSize - 2);
             }
         }
     }
