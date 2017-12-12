@@ -11,38 +11,45 @@ public class DFS extends SearchAlgorithm implements AbleToSearch{
     }
     public void Search(Cell start){
         runWorld(viz);
+        solutionLength=1;
         stack.push(start);
         while (!stack.empty()){
+            //draw w
             runWorld(viz);
 
+            //set pause for visualization
             try{
-                Thread.sleep(50,1);
+                Thread.sleep(1,1);
             }
             catch(InterruptedException e){}
-            ;
+            solutionLength+=1;
             Cell current = stack.pop();
-            System.out.println(current.coords.x+" "+current.coords.y);
-
+            if (current.discovered) continue;
+            current.discovered=true;
+            solutionLength+=1;
             if (current.coords.x==maze.finish.x && current.coords.y==maze.finish.y) {
                 drawSolution();
                 return;
             }
-            if (!current.discovered) current.discovered=true;
             if(current.coords.y>0 && maze.getCell(new Coordinates(current.coords.x,current.coords.y-1)).type!=1 && !maze.getCell(new Coordinates(current.coords.x,current.coords.y-1)).discovered){
                 Cell cell = maze.getCell(new Coordinates(current.coords.x,current.coords.y-1));
                 stack.push(cell);
+                continue;
             }
             if(current.coords.x>0 && maze.getCell(new Coordinates(current.coords.x-1,current.coords.y)).type!=1 && !maze.getCell(new Coordinates(current.coords.x-1,current.coords.y)).discovered){
                 Cell cell = maze.getCell(new Coordinates(current.coords.x-1,current.coords.y));
                 stack.push(cell);
+                continue;
             }
             if(current.coords.x<maze.getWidth()-1 && maze.getCell(new Coordinates(current.coords.x+1,current.coords.y)).type!=1 && !maze.getCell(new Coordinates(current.coords.x+1,current.coords.y)).discovered){
                 Cell cell = maze.getCell(new Coordinates(current.coords.x+1,current.coords.y));
                 stack.push(cell);
+                continue;
             }
             if(current.coords.y<maze.getHeight()-1 && maze.getCell(new Coordinates(current.coords.x,current.coords.y+1)).type!=1 && !maze.getCell(new Coordinates(current.coords.x,current.coords.y+1)).discovered){
                 Cell cell = maze.getCell(new Coordinates(current.coords.x,current.coords.y+1));
                 stack.push(cell);
+                continue;
             }
 
 

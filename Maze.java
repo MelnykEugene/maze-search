@@ -19,7 +19,7 @@ public class Maze
     private int height;
 
     public Maze(String filename) throws FileNotFoundException {
-        File given = new File("mazeherefillinlater");
+        File given = new File(filename);
         Scanner dataspec = new Scanner(given);
         int width = 0;
         int height = 0;
@@ -67,7 +67,7 @@ public class Maze
         Random rand=new Random();
         for (int x = 0; x < width; x++){
             for (int y = 0; y < height; y++){
-                int wallOrNotWall=rand.nextInt(11)>1 ? 0 : 1;
+                int wallOrNotWall=rand.nextInt(101)>25 ? 0 : 1;
                 imaze[x][y]=new Cell(wallOrNotWall,new Coordinates(x,y));
             }
         }
