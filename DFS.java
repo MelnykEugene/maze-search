@@ -1,6 +1,87 @@
 // Algorithm from wikipedia
 // Code by us
 
+import java.util.Random;
+import java.util.Stack;
+import java.util.ArrayList;
+
+public class DFS extends SearchAlgorithm implements AbleToSearch{
+    Stack<Cell> stack = new Stack<Cell>();
+    ArrayList<Cell> closed = new ArrayList<Cell>();
+    ArrayList<Cell> visited = new ArrayList<Cell>();
+    public DFS(Maze maze, Visualization pviz){
+        super(maze);
+        this.viz = pviz;
+    }
+    public void Search(Cell start){
+        runWorld(viz);
+        solutionLength=1;
+        stack.push(start);
+        while (!stack.empty()){
+            solutionLength+=1;
+            Cell current = stack.peek();
+            current.type=7;
+            current.current=true; //used for visualization only
+
+            runWorld(viz);
+
+            try{
+                Thread.sleep(0,1);
+            }
+            catch(InterruptedException e){}
+
+            current.current=false; //used for visualization only
+
+            if (current.coords.x==maze.finish.x && current.coords.y==maze.finish.y) {
+                drawSolution();
+                return;
+            }
+
+            current.discovered=true;
+            ArrayList<Cell> UnvisitedNeighbours=new ArrayList<>();
+            if(current.coords.y>0 && maze.getCell(new Coordinates(current.coords.x,current.coords.y-1)).type!=1 && !maze.getCell(new Coordinates(current.coords.x,current.coords.y-1)).discovered){
+                Cell cell = maze.getCell(new Coordinates(current.coords.x,current.coords.y-1));
+                UnvisitedNeighbours.add(cell);
+            }
+            if(current.coords.x>0 && maze.getCell(new Coordinates(current.coords.x-1,current.coords.y)).type!=1 && !maze.getCell(new Coordinates(current.coords.x-1,current.coords.y)).discovered){
+                Cell cell = maze.getCell(new Coordinates(current.coords.x-1,current.coords.y));
+                UnvisitedNeighbours.add(cell);
+            }
+            if(current.coords.y<maze.getHeight()-1 && maze.getCell(new Coordinates(current.coords.x,current.coords.y+1)).type!=1 && !maze.getCell(new Coordinates(current.coords.x,current.coords.y+1)).discovered){
+                Cell cell = maze.getCell(new Coordinates(current.coords.x,current.coords.y+1));
+                UnvisitedNeighbours.add(cell);
+            }
+            if(current.coords.x<maze.getWidth()-1 && maze.getCell(new Coordinates(current.coords.x+1,current.coords.y)).type!=1 && !maze.getCell(new Coordinates(current.coords.x+1,current.coords.y)).discovered){
+                Cell cell = maze.getCell(new Coordinates(current.coords.x+1,current.coords.y));
+                UnvisitedNeighbours.add(cell);
+            }
+            if (UnvisitedNeighbours.size()==0){
+                stack.pop();
+                current.type=8;
+            }
+            else{
+                for(Cell neighbour:UnvisitedNeighbours){
+                    neighbour.type=6;
+                }
+                Random rand = new Random();
+                int nextNeighbourIndex = rand.nextInt(UnvisitedNeighbours.size());
+                stack.push(UnvisitedNeighbours.get(nextNeighbourIndex));
+            }
+        }
+
+    }
+    public void drawSolution(){
+        for (Cell cell : stack){
+            cell.type=2;
+        }
+        runWorld(viz);
+    }
+    public void runWorld(Visualization viz){
+        viz.displayMaze(maze);
+    }
+}
+
+/*
 import java.util.Stack;
 
 public class DFS extends SearchAlgorithm implements AbleToSearch{
@@ -70,3 +151,4 @@ public class DFS extends SearchAlgorithm implements AbleToSearch{
         viz.displayMaze(maze);
     }
 }
+*/

@@ -18,7 +18,9 @@ public class Visualization extends JPanel {
         Color result = Color.YELLOW;
         if (cello.type==0) result= Color.WHITE;
         if (cello.type==1) result= new Color(70,70,200,200);
-        if (cello.discovered) result= new Color(0,200,0,180);
+        if (cello.type==7) result= new Color(120,40,40,230);
+        if (cello.type==8) result= new Color(0,255,0,100);
+        if (cello.type==6) result = new Color(0,200,250,250);
         if (cello.type==4||cello.type==5) result= Color.GREEN;
         if (cello.type==2) result= Color.RED;
         if (cello.current) result = Color.MAGENTA;
