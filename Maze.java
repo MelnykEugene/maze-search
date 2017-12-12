@@ -21,16 +21,16 @@ public class Maze
     public Maze(String filename) throws FileNotFoundException {
         File given = new File(filename);
         Scanner dataspec = new Scanner(given);
-        int width = 0;
-        int height = 0;
+        int widthl = 0;
+        int heightl = 0;
         while (dataspec.hasNextLine())
         {
             String line = dataspec.nextLine();
-            width = line.length();
-            height++;
+            widthl = line.length();
+            heightl++;
         }
         Scanner mazescan = new Scanner(given);
-        Cell[][] maze= new Cell[width][height];
+        Cell[][] maze= new Cell[widthl][heightl];
         int currentLoc = 0;
         while (mazescan.hasNextLine())
         {
@@ -38,11 +38,17 @@ public class Maze
             for(int i = 0; i < maze.length; i++)
             {
                 char part = currentRow.charAt(i);
-                maze[currentLoc][i] = new Cell(Character.getNumericValue(part),new Coordinates(currentLoc,i));
+                maze[i][currentLoc] = new Cell(Character.getNumericValue(part),new Coordinates(i,currentLoc));
             }
             currentLoc++;
         }
         imaze = maze;
+        width = widthl;
+        height = heightl;
+        start=new Coordinates(0,0);
+        finish=new Coordinates(width-1,height-1);
+        imaze[start.x][start.y] = new Cell(4,new Coordinates(start.x,start.y));
+        imaze[finish.x][finish.y] = new Cell(5,new Coordinates(finish.x,finish.y));
     }
 
 
@@ -67,7 +73,7 @@ public class Maze
         Random rand=new Random();
         for (int x = 0; x < width; x++){
             for (int y = 0; y < height; y++){
-                int wallOrNotWall=rand.nextInt(101)>40 ? 0 : 1;
+                int wallOrNotWall=rand.nextInt(101)>30 ? 0 : 1;
                 imaze[x][y]=new Cell(wallOrNotWall,new Coordinates(x,y));
             }
         }

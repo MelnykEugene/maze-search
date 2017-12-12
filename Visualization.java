@@ -1,32 +1,28 @@
 import javax.swing.JPanel;
 import javax.swing.JFrame;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Dimension;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.Font;
-
+import java.awt.*;
 public class Visualization extends JPanel {
 
     String generateMethod;  // how to regenerate maze
     String solveMethod;     // how to solve maze
     int IMAGEWIDTH=1680;         // width of the canvas
-    int IMAGEHEIGHT=950;        // height of the canvas
+    int IMAGEHEIGHT=1000;        // height of the canvas
     Maze _maze;
     int height;
     int width;
     int CellPixelSize;
 
     //selects color to paint a certain cell with
-    private static Color chooseColor(Cell cello){
-        if (cello.discovered) return new Color(0,200,0,70);
-        if (cello.type==0) return Color.WHITE;
-        if (cello.type==3) return Color.MAGENTA;
-        if (cello.type==4||cello.type==5) return Color.GREEN;
-        if (cello.type==2) return Color.RED;
-
-        else return Color.BLACK;
+    private Color chooseColor(Cell cello){
+        //if yellow shows than something is not handled
+        Color result = Color.YELLOW;
+        if (cello.type==0) result= Color.WHITE;
+        if (cello.type==1) result= new Color(70,70,200,200);
+        if (cello.discovered) result= new Color(0,200,0,180);
+        if (cello.type==4||cello.type==5) result= Color.GREEN;
+        if (cello.type==2) result= Color.RED;
+        if (cello.current) result = Color.MAGENTA;
+        return result;
     }
 
     public  void displayMaze(Maze maze){
@@ -43,7 +39,7 @@ public class Visualization extends JPanel {
         //int height = _maze.getHeight();
         //int width = _maze.getWidth();
         this.setPreferredSize(new Dimension(IMAGEWIDTH, IMAGEHEIGHT));
-        JFrame frame = new JFrame("life");
+        JFrame frame = new JFrame("maze search");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(this);
         frame.pack();
@@ -63,7 +59,7 @@ public class Visualization extends JPanel {
                 int inity = (y) * CellPixelSize;
                 //System.out.println(initx);
                 g.setColor(chooseColor(cell));
-                g.fillRect(initx + 1, inity + 1, CellPixelSize - 2, CellPixelSize - 2);
+                g.fillRect(initx, inity, CellPixelSize, CellPixelSize);
             }
         }
     }

@@ -33,3 +33,7 @@ public class SearchAlgorithm {
     }
     public long getTimeRequired(){ return timeStarted; }
 }
+
+interface AbleToSearch {
+    public void Search(Cell start);
+}

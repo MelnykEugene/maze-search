@@ -1,11 +1,14 @@
 import java.util.Random;
 import java.util.Scanner;
 /*
+
+//https://algs4.cs.princeton.edu/41graph/Maze.java.html
+
 public class MazeGenerator
 {
     private int wid;
     private int hei;
-    private int[][] imaze;
+    private Cell[][] imaze;
     private boolean[][] north;
     private boolean[][] south;
     private boolean[][] east;
@@ -17,7 +20,7 @@ public class MazeGenerator
         wid = width;
         hei = height;
         state = new boolean[wid][hei];
-        imaze = new int[wid][hei];
+        imaze = new Cell[wid][hei];
         setupMaze();
     }
 
@@ -50,9 +53,9 @@ public class MazeGenerator
             }
         }
     }
-        public void generateMaze(int starX, int starY)
-        {
-            state[starX,starY] = true;
+
+        public void generateMaze(int starX, int starY) {
+            state[starX][starY] = true;
             while (!state[x+1][y] || !state[x][y+1] || !state[x-1][y] || !state[x][y-1])
             {
                 while (true)
@@ -94,7 +97,7 @@ public class MazeGenerator
         generateMaze(1,1);
         for (int x = 0; x < wid; x++)
         {
-            for (int y = 0; y < hei, y++)
+            for (int y = 0; y < hei; y++)
             {
                 if (north[x][y])
                 {
@@ -122,4 +125,5 @@ public class MazeGenerator
         return imaze;
     }
 }
+
 */
