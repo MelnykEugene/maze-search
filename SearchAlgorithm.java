@@ -2,7 +2,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchLab{
+public class SearchAlgorithm {
     /*
         Copy of the grid so that the initial maze stays intact and the changes are made to the local copy only
      */
@@ -14,15 +14,16 @@ public class SearchLab{
     /*
         Stores the time required to solve (determined inside the search methods)
      */
-    public long timeRequired;
+    public long timeStarted;
     /*
         Constructor: Setting up everything.
      */
+    Visualization viz;
 
-    public SearchLab(Maze a){
-        maze = a;
+    public SearchAlgorithm(Maze pmaze){
+        this.maze = pmaze;
         solutionLength = Integer.MAX_VALUE;
-        timeRequired = System.currentTimeMillis();
+        timeStarted = System.currentTimeMillis();
     }
     /*
         Get the current solutionlength;
@@ -30,4 +31,5 @@ public class SearchLab{
     public int getSolutionLength() {
         return solutionLength;
     }
+    public long getTimeRequired(){ return timeStarted; }
 }

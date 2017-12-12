@@ -5,7 +5,7 @@ public class main{
         Maze maze = new Maze(100,100);
         maze.generateRandom();
         Visualization viz = new Visualization(maze);
-        viz.Initilize();
-        viz.shownew();
+        DFS solver = new DFS(maze,viz);
+        solver.Search();
     }
 }

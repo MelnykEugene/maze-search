@@ -9,16 +9,33 @@ import java.awt.Font;
 
 public class Visualization extends JPanel {
 
-    int height;             // height of maze in cells
-    int width;              // width of maze in cells
-    int IMAGEHEIGHT=1050;        // height of the canvas
-    int IMAGEWIDTH=1680;         // width of the canvas
     String generateMethod;  // how to regenerate maze
     String solveMethod;     // how to solve maze
-    Maze _maze;             // local copy of maze
-    int CellPixelSize;      // size of one square cell in pixel
+    int IMAGEWIDTH=1680;         // width of the canvas
+    int IMAGEHEIGHT=1050;        // height of the canvas
+    Maze _maze;
+    int height;
+    int width;
+    int CellPixelSize;
 
+    //selects color to paint a certain cell with
+    private static Color chooseColor(Cell cello){
+        if (cello.type==0) return Color.WHITE;
+        if (cello.type==3) return Color.RED;
+        if (cello.type==4||cello.type==5) return Color.RED;
 
+        else return Color.BLUE;
+    }
+
+    public  void displayMaze(Maze maze){
+
+        _maze = maze;
+        height=_maze.getHeight();
+        width=_maze.getWidth();
+        CellPixelSize = Math.min(IMAGEHEIGHT/height,IMAGEWIDTH/width);
+        CellPixelSize=Math.min(CellPixelSize,100);
+        this.repaint();
+    }
     public Visualization(Maze maze) {
         //_maze = maze;
         //int height = _maze.getHeight();
@@ -29,25 +46,13 @@ public class Visualization extends JPanel {
         frame.setContentPane(this);
         frame.pack();
         frame.setVisible(true);
-        _maze = maze;
-        height=_maze.getHeight();
-        width=_maze.getWidth();
     }
-    public Visualization(){
-        this(null);
-    }
-
-    public void Initilize(){
-        // calculate the size of one cell on screen
-        CellPixelSize = Math.min(IMAGEHEIGHT/height,IMAGEWIDTH/width);
-        CellPixelSize=Math.min(CellPixelSize,100);
-    }
-
 
     private void display(Graphics g) {
         // clear screen
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, IMAGEWIDTH, IMAGEHEIGHT);
+
         // iterate over cells and draw them in corresponding spot with color depending on state of the Cell;
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
@@ -61,7 +66,7 @@ public class Visualization extends JPanel {
         }
     }
 
-    public void shownew() {
+    public void shownew(Maze maze) {
         this.repaint();
     }
 
@@ -70,9 +75,4 @@ public class Visualization extends JPanel {
         display(g);
     }
 
-    //selects color to paint a certain cell with
-    private Color chooseColor(Cell cello){
-        if (cello.type==0) return Color.WHITE;
-        else return Color.BLUE;
-    }
 }

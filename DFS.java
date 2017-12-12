@@ -1,27 +1,48 @@
-import java.util.ArrayList;
-import java.util.List;
-
-public class DFS extends SearchLab implements Searchable{
-    public DFS(Maze a){
-        super(a);
+public class DFS extends SearchAlgorithm implements AbleToSearch{
+    public DFS(Maze maze, Visualization pviz){
+        super(maze);
+        this.viz = pviz;
     }
-    public void Searchable(){
-        int a;
-        if(maze.start.x == maze.endX && maze.startingY == maze.endY) {
-            maze.imaze[maze.startingX][maze.startingY]==3;
-            runWorld();
+    public void Search(){
+        int a=0;
+        runWorld(viz);
+    }
+    public void runWorld(Visualization viz){
+        viz.displayMaze(maze);
+    }
+}
+
+interface AbleToSearch {
+    public void Search();
+}
+
+/*
+
+public class DFS extends SearchAlgorithm implements AbleToSearch{
+    public DFS(Maze maze, Visualization pviz){
+        super(maze);
+        this.viz = pviz;
+    }
+    public void Search(){
+        int a=0;
+        if(maze.start.x == maze.finish.x && maze.start.y == maze.finish.y) {
+            maze.imaze[maze.start.x][maze.start.y].type=3;
+            runWorld(viz);
+            System.out.println("trying");
+
         }
         else {
-            maze.imaze[maze.startingX][maze.startingY]=1;
+            maze.imaze[maze.start.x][maze.start.y].type=1;
             for (int k = -1; k < 2; k++) {
                 for (int l = -1; l < 2; l++) {
+                    System.out.println("trying");
                     if (k == 0 && l == 0)
                         continue;
-                    if (maze.imaze[maze.startingX + k][maze.startingY + l] == 0) {
-                        a = Searchable(maze.startingX + k, maze.startingY + l);
+                    if (maze.imaze[maze.start.x + k][maze.start.y + l].type == 0) {
+                        a = Search(maze.start.x + k, maze.start.y + l);
                         if (a != 0) {
-                            maze.imaze[maze.startingX][maze.startingY]=3;
-                            runWorld();
+                            maze.imaze[maze.start.x][maze.start.y].type=3;
+                            runWorld(viz);
                             break;
                         }
                     }
@@ -33,24 +54,24 @@ public class DFS extends SearchLab implements Searchable{
             super.solutionLength = a;
         }
     }
-    public int Searchable(int startingX, int startingY){
+    public int Search(int startx, int starty){
     int a = 0;
-    maze.imaze[maze.startingX][maze.startingY]=1;
+    maze.imaze[maze.start.x][maze.start.y].type=1;
         for (int k = -1; k < 2; k++) {
             for (int l = -1; l < 2; l++) {
                 if (k == 0 && l == 0)
                     continue;
-                if(startingX == maze.endX && startingY == maze.endY) {
-                    maze.imaze[maze.startingX][maze.startingY]=3;
-                    runWorld();
+                if(startx == maze.finish.x && starty == maze.finish.y) {
+                    maze.imaze[maze.start.x][maze.start.y].type=3;
+                    runWorld(viz);
                     a = 1;
                     break;
                 }
-                if (maze.imaze[startingX + k][startingY + l] == 0) {
-                    a = Searchable(maze.startingX + k, maze.startingY + l);
+                if (maze.imaze[startx + k][starty + l].type == 0) {
+                    a = Search(maze.start.x + k, maze.start.y + l);
                     if (a != 0) {
-                        maze.imaze[maze.startingX][maze.startingY]==3;
-                        runWorld();
+                        maze.imaze[maze.start.x][maze.start.y].type=3;
+                        runWorld(viz);
                         a++;
                         break;
                     }
@@ -63,7 +84,13 @@ public class DFS extends SearchLab implements Searchable{
         return a;
     }
 
-    public void runWorld(){
-        viz.display(maze.imaze);
+    public void runWorld(Visualization viz){
+        viz.displayMaze(maze);
     }
 }
+
+ interface AbleToSearch{
+    public void Search();
+}
+
+*/

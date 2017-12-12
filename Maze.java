@@ -13,8 +13,8 @@ public class Maze
     9-start
     */
     public Cell[][] imaze;
-    private Coordinates start;
-    private Coordinates finish;
+    public Coordinates start;
+    public Coordinates finish;
     private int width;
     private int height;
 
@@ -67,10 +67,12 @@ public class Maze
         Random rand=new Random();
         for (int x = 0; x < width; x++){
             for (int y = 0; y < height; y++){
-                int wallOrNotWall=rand.nextInt(11)>5 ? 0 : 1;
+                int wallOrNotWall=rand.nextInt(11)>1 ? 0 : 1;
                 imaze[x][y]=new Cell(wallOrNotWall,new Coordinates(x,y));
             }
         }
+        imaze[start.x][start.y] = new Cell(4,new Coordinates(start.x,start.y));
+        imaze[finish.x][finish.y] = new Cell(5,new Coordinates(finish.x,finish.y));
     }
 
     public Cell[][] getMaze()
