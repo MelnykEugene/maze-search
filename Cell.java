@@ -4,6 +4,9 @@ Encapsulation of Cells in the maze
 value of type corresponds to logic states of the cell:
 0-empty
 1-is a wall
+2-part of solution
+4-start
+5-end
 
  */
 
@@ -11,6 +14,7 @@ class Cell{
     int type;
     public Coordinates coords;
     public double weight;
+    public boolean discovered=false;
     public Cell(int ptype, Coordinates pcoords){
         this.type=ptype;
         this.coords=pcoords;

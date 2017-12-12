@@ -22,7 +22,7 @@ public class SearchAlgorithm {
 
     public SearchAlgorithm(Maze pmaze){
         this.maze = pmaze;
-        solutionLength = Integer.MAX_VALUE;
+        solutionLength = 0;
         timeStarted = System.currentTimeMillis();
     }
     /*

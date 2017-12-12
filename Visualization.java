@@ -12,7 +12,7 @@ public class Visualization extends JPanel {
     String generateMethod;  // how to regenerate maze
     String solveMethod;     // how to solve maze
     int IMAGEWIDTH=1680;         // width of the canvas
-    int IMAGEHEIGHT=1050;        // height of the canvas
+    int IMAGEHEIGHT=950;        // height of the canvas
     Maze _maze;
     int height;
     int width;
@@ -20,11 +20,13 @@ public class Visualization extends JPanel {
 
     //selects color to paint a certain cell with
     private static Color chooseColor(Cell cello){
+        if (cello.discovered) return new Color(0,200,0,70);
         if (cello.type==0) return Color.WHITE;
-        if (cello.type==3) return Color.RED;
-        if (cello.type==4||cello.type==5) return Color.RED;
+        if (cello.type==3) return Color.MAGENTA;
+        if (cello.type==4||cello.type==5) return Color.GREEN;
+        if (cello.type==2) return Color.RED;
 
-        else return Color.BLUE;
+        else return Color.BLACK;
     }
 
     public  void displayMaze(Maze maze){
@@ -56,7 +58,7 @@ public class Visualization extends JPanel {
         // iterate over cells and draw them in corresponding spot with color depending on state of the Cell;
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                Cell cell = _maze.getCell(x, y);
+                Cell cell = _maze.getCell(new Coordinates(x,y));
                 int initx = (x) * CellPixelSize;
                 int inity = (y) * CellPixelSize;
                 //System.out.println(initx);

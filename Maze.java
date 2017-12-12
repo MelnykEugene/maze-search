@@ -88,7 +88,7 @@ public class Maze
         return height;
     }
 
-    public Cell getCell(int x,int y){
-        return imaze[x][y];
+    public Cell getCell(Coordinates coords){
+        return imaze[coords.x][coords.y];
     }
 }
