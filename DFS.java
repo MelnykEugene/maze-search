@@ -13,7 +13,7 @@ public class DFS extends SearchAlgorithm implements AbleToSearch{
         super(maze);
         this.viz = pviz;
     }
-    public void Search(Cell start){
+    public void Search(Cell start,int wait){
         runWorld(viz);
         solutionLength=1;
         stack.push(start);
@@ -21,16 +21,8 @@ public class DFS extends SearchAlgorithm implements AbleToSearch{
             solutionLength+=1;
             Cell current = stack.peek();
             current.type=7;
+
             current.current=true; //used for visualization only
-
-            runWorld(viz);
-
-            try{
-                Thread.sleep(0,1);
-            }
-            catch(InterruptedException e){}
-
-            current.current=false; //used for visualization only
 
             if (current.coords.x==maze.finish.x && current.coords.y==maze.finish.y) {
                 drawSolution();
@@ -38,6 +30,7 @@ public class DFS extends SearchAlgorithm implements AbleToSearch{
             }
 
             current.discovered=true;
+
             ArrayList<Cell> UnvisitedNeighbours=new ArrayList<>();
             if(current.coords.y>0 && maze.getCell(new Coordinates(current.coords.x,current.coords.y-1)).type!=1 && !maze.getCell(new Coordinates(current.coords.x,current.coords.y-1)).discovered){
                 Cell cell = maze.getCell(new Coordinates(current.coords.x,current.coords.y-1));
@@ -64,9 +57,17 @@ public class DFS extends SearchAlgorithm implements AbleToSearch{
                     neighbour.type=6;
                 }
                 Random rand = new Random();
-                int nextNeighbourIndex = rand.nextInt(UnvisitedNeighbours.size());
-                stack.push(UnvisitedNeighbours.get(nextNeighbourIndex));
+
+                stack.push(UnvisitedNeighbours.get(rand.nextInt(UnvisitedNeighbours.size())));
             }
+            runWorld(viz);
+
+            try{
+                Thread.sleep(wait,1);
+            }
+            catch(InterruptedException e){}
+
+            current.current=false;
         }
 
     }

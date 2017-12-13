@@ -19,7 +19,7 @@ public class mainApp extends JFrame{
         visualization=viz;
     }
     public static void main(String[] argv) throws FileNotFoundException {
-        Maze maze = new Maze(200,100);
+        Maze maze = new Maze(30,20);
 
         maze.generateRandom();
         Visualization viz = new Visualization(maze);
@@ -31,6 +31,6 @@ public class mainApp extends JFrame{
 //        frame.setVisible(true);
 
         DFS solver = new DFS(maze,viz);
-        solver.Search(maze.getCell(maze.start));
+        solver.Search(maze.getCell(maze.start),20);
     }
 }

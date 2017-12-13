@@ -35,5 +35,5 @@ public class SearchAlgorithm {
 }
 
 interface AbleToSearch {
-    public void Search(Cell start);
+    public void Search(Cell start,int wait);
 }

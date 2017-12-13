@@ -18,12 +18,12 @@ public class Visualization extends JPanel {
         Color result = Color.YELLOW;
         if (cello.type==0) result= Color.WHITE;
         if (cello.type==1) result= new Color(70,70,200,200);
-        if (cello.type==7) result= new Color(120,40,40,230);
+        if (cello.type==7) result= Color.RED;
         if (cello.type==8) result= new Color(0,255,0,100);
         if (cello.type==6) result = new Color(0,200,250,250);
-        if (cello.type==4||cello.type==5) result= Color.GREEN;
-        if (cello.type==2) result= Color.RED;
         if (cello.current) result = Color.MAGENTA;
+        if (cello.type==2) result= Color.RED;
+        if (cello.type==4||cello.type==5) result= Color.GREEN;
         return result;
     }
 
@@ -33,7 +33,7 @@ public class Visualization extends JPanel {
         height=_maze.getHeight();
         width=_maze.getWidth();
         CellPixelSize = Math.min(IMAGEHEIGHT/height,IMAGEWIDTH/width);
-        CellPixelSize=Math.min(CellPixelSize,100);
+        CellPixelSize=Math.min(CellPixelSize,50);
         this.repaint();
     }
     public Visualization(Maze maze) {
@@ -57,8 +57,8 @@ public class Visualization extends JPanel {
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 Cell cell = _maze.getCell(new Coordinates(x,y));
-                int initx = (x) * CellPixelSize;
-                int inity = (y) * CellPixelSize;
+                int initx = (IMAGEWIDTH-width*CellPixelSize)/2 + x*CellPixelSize;
+                int inity = (IMAGEHEIGHT-height*CellPixelSize)/2 + y*CellPixelSize;
                 //System.out.println(initx);
                 g.setColor(chooseColor(cell));
                 g.fillRect(initx, inity, CellPixelSize, CellPixelSize);

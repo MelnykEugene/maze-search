@@ -73,7 +73,7 @@ public class Maze
         Random rand=new Random();
         for (int x = 0; x < width; x++){
             for (int y = 0; y < height; y++){
-                int wallOrNotWall=rand.nextInt(101)>30 ? 0 : 1;
+                int wallOrNotWall=rand.nextInt(101)>25 ? 0 : 1;
                 imaze[x][y]=new Cell(wallOrNotWall,new Coordinates(x,y));
             }
         }
