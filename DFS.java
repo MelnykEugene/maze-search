@@ -7,8 +7,6 @@ import java.util.ArrayList;
 
 public class DFS extends SearchAlgorithm implements AbleToSearch{
     Stack<Cell> stack = new Stack<Cell>();
-    ArrayList<Cell> closed = new ArrayList<Cell>();
-    ArrayList<Cell> visited = new ArrayList<Cell>();
     public DFS(Maze maze, Visualization pviz){
         super(maze);
         this.viz = pviz;

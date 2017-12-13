@@ -1,23 +1,21 @@
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Stack;
 
 public class Maze
-{   /*
-    imaze is a integer matrix with values meaning the following:
-    0-empty
-    1-wall
-
-    8-end
-    9-start
-    */
+{
     public Cell[][] imaze;
     public Coordinates start;
     public Coordinates finish;
+
+    //maze knows its width and height so they can be easily retrived later
     private int width;
     private int height;
 
+    //file-based constructor
     public Maze(String filename) throws FileNotFoundException {
         File given = new File(filename);
         Scanner dataspec = new Scanner(given);
@@ -42,6 +40,9 @@ public class Maze
             }
             currentLoc++;
         }
+
+
+        //sets the local variables
         imaze = maze;
         width = widthl;
         height = heightl;
@@ -51,12 +52,12 @@ public class Maze
         imaze[finish.x][finish.y] = new Cell(5,new Coordinates(finish.x,finish.y));
     }
 
-
+    //constucts a maze full of "empty cells"
     public Maze(int pwidth,int pheight,int xstart,int ystart, int xfinish, int yfinish){
         imaze=new Cell[pwidth][pheight];
-        for (int x =0; x< width; x++){
-            for (int y =0; y< height; y++){
-                imaze[x][y]=new Cell(0,new Coordinates(x,y));
+        for (int x =0; x< pwidth; x++){
+            for (int y =0; y< pheight; y++){
+                imaze[x][y]=new Cell(1,new Coordinates(x,y));
             }
         }
         start=new Coordinates(xstart,ystart);
@@ -64,11 +65,12 @@ public class Maze
         this.height=pheight;
         this.width=pwidth;
     }
-
+    //constructor for when the initial and final points are not provided
     public Maze(int pwidth,int pheight){
         this(pwidth,pheight,0,0,pwidth-1,pheight-1);
     }
 
+    //generates the maze by randomly putting walls
     public void generateRandom(){
         Random rand=new Random();
         for (int x = 0; x < width; x++){
@@ -80,6 +82,87 @@ public class Maze
         imaze[start.x][start.y] = new Cell(4,new Coordinates(start.x,start.y));
         imaze[finish.x][finish.y] = new Cell(5,new Coordinates(finish.x,finish.y));
     }
+
+    //generates the maze using algorithms similar to recursive backtracker
+    public void generateRecursiveBacktracker(Visualization viz){
+        Stack<Cell> stack = new Stack<Cell>();
+
+        this.start=new Coordinates(1,1);
+        this.finish=new Coordinates(this.getWidth()-2,this.getHeight()-2);
+
+        this.getCell(this.start).type=4;
+        this.getCell(this.finish).type=5;
+
+        Cell current = this.getCell(this.start);
+        current.visited=true;
+        
+        //current is not a wall
+        current.type=0;
+        while(hasUnvisited()){
+            current.current=true;
+            viz.displayMaze(this);
+            try{
+                Thread.sleep(50,1);
+            }
+            catch(InterruptedException e){}
+            current.current=false;
+
+            ArrayList<Cell> potentialNeighbours=new ArrayList<>();
+            ArrayList<Cell> potentialFarNeighbours=new ArrayList<>();
+            if(current.coords.y>1 && !this.getCell(new Coordinates(current.coords.x,current.coords.y-2)).visited){
+                Cell cell = this.getCell(new Coordinates(current.coords.x,current.coords.y-1));
+                potentialNeighbours.add(cell);
+                cell = this.getCell(new Coordinates(current.coords.x,current.coords.y-2));
+                potentialFarNeighbours.add(cell);
+            }
+            if(current.coords.x>1  && !this.getCell(new Coordinates(current.coords.x-2,current.coords.y)).visited){
+                Cell cell = this.getCell(new Coordinates(current.coords.x-1,current.coords.y));
+                potentialNeighbours.add(cell);
+                cell = this.getCell(new Coordinates(current.coords.x-2,current.coords.y));
+                potentialFarNeighbours.add(cell);
+            }
+            if(current.coords.y<this.getHeight()-2 && !this.getCell(new Coordinates(current.coords.x,current.coords.y+2)).visited){
+                Cell cell = this.getCell(new Coordinates(current.coords.x,current.coords.y+1));
+                potentialNeighbours.add(cell);
+                cell = this.getCell(new Coordinates(current.coords.x,current.coords.y+2));
+                potentialFarNeighbours.add(cell);
+            }
+            if(current.coords.x<this.getWidth()-2 && !this.getCell(new Coordinates(current.coords.x+2,current.coords.y)).visited){
+                Cell cell = this.getCell(new Coordinates(current.coords.x+1,current.coords.y));
+                potentialNeighbours.add(cell);
+                cell = this.getCell(new Coordinates(current.coords.x+2,current.coords.y));
+                potentialFarNeighbours.add(cell);
+            }
+
+            if (!(potentialNeighbours.size()==0)){
+                Random rand=new Random();
+                int index = rand.nextInt(potentialNeighbours.size());
+                potentialNeighbours.get(index).type=0;
+                potentialNeighbours.get(index).visited=true;
+                potentialFarNeighbours.get(index).visited=true;
+                potentialFarNeighbours.get(index).type=0;
+                current = potentialFarNeighbours.get(index);
+                stack.push(current);
+            }
+            else if(!stack.empty()){
+                current=stack.pop();
+            }
+            else {
+                return;
+            }
+        }
+    }
+
+    //helper method for recursive generator
+    private boolean hasUnvisited(){
+        for (int x =0; x<width;x++){
+            for(int y =0; y<height;y++){
+                if (!(this.getCell(new Coordinates(x,y)).visited)) return true;
+            }
+        }
+        return false;
+    }
+
 
     public Cell[][] getMaze()
     {

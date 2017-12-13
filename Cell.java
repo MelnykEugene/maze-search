@@ -20,6 +20,10 @@ class Cell{
     public double weight;
     public boolean discovered=false;
     public boolean current = false;
+    public boolean visited = false; //used for recursive maze-generator
+                                    //this additional boolean var is required because in generator a cell can be both visited
+                                    //and a wall
+
     public Cell(int ptype, Coordinates pcoords){
         this.type=ptype;
         this.coords=pcoords;
