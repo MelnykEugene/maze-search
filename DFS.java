@@ -66,6 +66,7 @@ public class DFS extends SearchAlgorithm implements AbleToSearch{
             catch(InterruptedException e){}
 
             current.current=false;
+            System.out.println("Step: "+solutionLength);
         }
 
     }

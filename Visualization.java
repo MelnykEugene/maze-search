@@ -16,7 +16,7 @@ public class Visualization extends JPanel {
     private Color chooseColor(Cell cello){
         //if yellow shows than something is not handled
         Color result = Color.YELLOW;
-        if (cello.type==0) result= Color.ORANGE;
+        if (cello.type==0) result= Color.WHITE;
         if (cello.type==1) result= new Color(70,70,200,200);
         if (cello.type==7) result= Color.RED;
         if (cello.type==8) result= new Color(0,255,0,100);
@@ -33,7 +33,7 @@ public class Visualization extends JPanel {
         height=_maze.getHeight();
         width=_maze.getWidth();
         CellPixelSize = Math.min(IMAGEHEIGHT/height,IMAGEWIDTH/width);
-        CellPixelSize=Math.min(CellPixelSize,50);
+        CellPixelSize=Math.min(CellPixelSize,40);
         this.repaint();
     }
     public Visualization(Maze maze) {

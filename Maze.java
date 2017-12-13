@@ -75,7 +75,7 @@ public class Maze
         Random rand=new Random();
         for (int x = 0; x < width; x++){
             for (int y = 0; y < height; y++){
-                int wallOrNotWall=rand.nextInt(101)>25 ? 0 : 1;
+                int wallOrNotWall=rand.nextInt(101)>5 ? 0 : 1;
                 imaze[x][y]=new Cell(wallOrNotWall,new Coordinates(x,y));
             }
         }
@@ -84,7 +84,7 @@ public class Maze
     }
 
     //generates the maze using algorithms similar to recursive backtracker
-    public void generateRecursiveBacktracker(Visualization viz){
+    public void generateRecursiveBacktracker(Visualization viz,int wait){
         Stack<Cell> stack = new Stack<Cell>();
 
         this.start=new Coordinates(1,1);
@@ -98,11 +98,12 @@ public class Maze
         
         //current is not a wall
         current.type=0;
+
         while(hasUnvisited()){
             current.current=true;
             viz.displayMaze(this);
             try{
-                Thread.sleep(50,1);
+                Thread.sleep(wait,0);
             }
             catch(InterruptedException e){}
             current.current=false;
@@ -145,8 +146,7 @@ public class Maze
                 stack.push(current);
             }
             else if(!stack.empty()){
-                current=stack.pop();
-            }
+                current=stack.pop(); }
             else {
                 return;
             }

@@ -1,73 +1,105 @@
 // Algorithm from wikipedia
 // Code by us
-/*
-import java.util.LinkedList;
-import java.util.ArrayList;
+
+import java.util.*;
+import java.util.Collections.*;
+
+// will be used to build path back when solution is found
+class Tuple<K,V>{
+    public K k;
+    public V v;
+    public Tuple(K k, V v){
+        this.k=k;
+        this.v=v;
+    }
+}
 
 public class BFS extends SearchAlgorithm implements AbleToSearch{
+    //stores open cells, the ones which will be called on further iterations
     LinkedList<Cell> open = new LinkedList<Cell>();
-    ArrayList<Cell> closed = new ArrayList<Cell>();
+
+    //stores closed cells, the ones which we do not want to ever call again
+    ArrayList<Cell> closed = new ArrayList<>();
+
+    //stores Cell - (previus cell) data to construct the path after search is concluded
+    ArrayList<Tuple<Cell,Cell>> map = new ArrayList<Tuple<Cell,Cell>>();
+
     public BFS(Maze maze, Visualization pviz){
         super(maze);
         this.viz = pviz;
     }
-    public void Search(Cell start){
-        runWorld(viz);
+    public void Search(Cell start,int wait){
         solutionLength=1;
         open.add(start);
         while (!open.isEmpty()){
-
             solutionLength+=1;
-            Cell current = open.();
+            Cell current = open.remove();
+            current.current=true;
+            if(!closed.contains(current)) closed.add(current);
+            current.type=8;
 
-            if (current.discovered) continue; //don't do anything on previously visited cells
-
-            current.current=true; //used for visualization only
-
-            runWorld(viz);
-
-            try{
-                Thread.sleep(10,1);
-            }
-            catch(InterruptedException e){}
-
-            current.current=false; //used for visualization only
-
-
-            current.discovered=true;
-
-            solutionLength+=1;
-            if (current.coords.x==maze.finish.x && current.coords.y==maze.finish.y) {
-                drawSolution();
+            if (current.coords.x==maze.finish.x && current.coords.y == maze.finish.y){
+                ConstructPath(wait);
                 return;
             }
-            if(current.coords.y>0 && maze.getCell(new Coordinates(current.coords.x,current.coords.y-1)).type!=1 && !maze.getCell(new Coordinates(current.coords.x,current.coords.y-1)).discovered){
-                Cell cell = maze.getCell(new Coordinates(current.coords.x,current.coords.y-1));
-                stack.push(cell);
+
+            ArrayList<Cell> potentials=new ArrayList<>();
+
+            if (current.coords.y>0 && !closed.contains(maze.getCell(new Coordinates(current.coords.x,current.coords.y-1))) && maze.getCell(new Coordinates(current.coords.x,current.coords.y-1)).type!=1) {
+                if (!open.contains(maze.getCell(new Coordinates(current.coords.x,current.coords.y-1)))) open.add(maze.getCell(new Coordinates(current.coords.x,current.coords.y-1)));
+                maze.getCell(new Coordinates(current.coords.x,current.coords.y-1)).type=6;
+                map.add(new Tuple<>(maze.getCell(new Coordinates(current.coords.x,current.coords.y-1)),current));
+
             }
-            if(current.coords.x>0 && maze.getCell(new Coordinates(current.coords.x-1,current.coords.y)).type!=1 && !maze.getCell(new Coordinates(current.coords.x-1,current.coords.y)).discovered){
-                Cell cell = maze.getCell(new Coordinates(current.coords.x-1,current.coords.y));
-                stack.push(cell);
+            if (current.coords.x>0 && !closed.contains(maze.getCell(new Coordinates(current.coords.x-1,current.coords.y)))&& maze.getCell(new Coordinates(current.coords.x-1,current.coords.y)).type!=1) {
+                if (!open.contains(maze.getCell(new Coordinates(current.coords.x-1,current.coords.y)))) open.add(maze.getCell(new Coordinates(current.coords.x-1,current.coords.y)));
+                maze.getCell(new Coordinates(current.coords.x-1,current.coords.y)).type=6;
+                map.add(new Tuple<>(maze.getCell(new Coordinates(current.coords.x-1,current.coords.y)),current));
+
             }
-            if(current.coords.y<maze.getHeight()-1 && maze.getCell(new Coordinates(current.coords.x,current.coords.y+1)).type!=1 && !maze.getCell(new Coordinates(current.coords.x,current.coords.y+1)).discovered){
-                Cell cell = maze.getCell(new Coordinates(current.coords.x,current.coords.y+1));
-                stack.push(cell);
+            if (current.coords.y<maze.getHeight()-1 && !closed.contains(maze.getCell(new Coordinates(current.coords.x,current.coords.y+1)))&& maze.getCell(new Coordinates(current.coords.x,current.coords.y+1)).type!=1) {
+                if (!open.contains(maze.getCell(new Coordinates(current.coords.x,current.coords.y+1)))) open.add(maze.getCell(new Coordinates(current.coords.x,current.coords.y+1)));
+                maze.getCell(new Coordinates(current.coords.x,current.coords.y+1)).type=6;
+                map.add(new Tuple<>(maze.getCell(new Coordinates(current.coords.x,current.coords.y+1)),current));
+
             }
-            if(current.coords.x<maze.getWidth()-1 && maze.getCell(new Coordinates(current.coords.x+1,current.coords.y)).type!=1 && !maze.getCell(new Coordinates(current.coords.x+1,current.coords.y)).discovered){
-                Cell cell = maze.getCell(new Coordinates(current.coords.x+1,current.coords.y));
-                stack.push(cell);
+            if (current.coords.x<maze.getWidth()-1 && !closed.contains(maze.getCell(new Coordinates(current.coords.x+1,current.coords.y))) && maze.getCell(new Coordinates(current.coords.x+1,current.coords.y)).type!=1) {
+                if (!open.contains(maze.getCell(new Coordinates(current.coords.x+1,current.coords.y)))) open.add(maze.getCell(new Coordinates(current.coords.x+1,current.coords.y)));
+                maze.getCell(new Coordinates(current.coords.x+1,current.coords.y)).type=6;
+                map.add(new Tuple<>(maze.getCell(new Coordinates(current.coords.x+1,current.coords.y)),current));
             }
+
+            runWorld(viz);
+            try{
+                Thread.sleep(wait,1);
+            }
+
+            catch(InterruptedException e){}
+            current.current=false;
+        }
+    }
+    public void ConstructPath(int wait){
+        ArrayList<Cell> path = new ArrayList<Cell>();
+        Cell current = maze.getCell(maze.finish);
+        while ((current.coords.x!=maze.start.x) || (current.coords.y!=maze.start.y)){
+            path.add(current);
+            for(Tuple<Cell,Cell> tuple :map ){
+                if (tuple.k==current) current=tuple.v;
+            }
+        }
+        path.add(maze.getCell(maze.start));
+
+        for(Cell cell : path){
+            cell.type=2;
+            try{
+                Thread.sleep(wait,1);
+            }
+            catch(InterruptedException e){}
+            runWorld(viz);
         }
 
-    }
-    public void drawSolution(){
-        for (Cell cell : stack){
-            cell.type=2;
-        }
-        runWorld(viz);
     }
     public void runWorld(Visualization viz){
         viz.displayMaze(maze);
     }
 }
-*/
