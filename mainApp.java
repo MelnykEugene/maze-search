@@ -19,9 +19,9 @@ public class mainApp extends JFrame{
         visualization=viz;
     }
     public static void main(String[] argv) throws FileNotFoundException {
-        Maze maze = new Maze(100,100);
+        Maze maze = new Maze(30,15);
         Visualization viz = new Visualization(maze);
-        maze.generateRecursiveBacktracker(viz,0);
+        maze.generateRecursiveBacktracker(viz,20);
         //viz.displayMaze(maze);
 
 //        JFrame frame = new JFrame("maze search");
@@ -31,6 +31,6 @@ public class mainApp extends JFrame{
 //        frame.setVisible(true);
 
         BFS solver = new BFS(maze,viz);
-        solver.Search(maze.getCell(maze.start),2);
+        solver.Search(maze.getCell(maze.start),20);
     }
 }

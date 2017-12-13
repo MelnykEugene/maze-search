@@ -15,11 +15,18 @@ value of type corresponds to logic states of the cell:
  */
 
 class Cell{
+    //encodes (some of) semantics of cell state
     int type;
+
     public Coordinates coords;
+
+    //weight of path of we decide to have weighted vertices
     public double weight;
+
     public boolean discovered=false;
-    public boolean current = false;
+
+    public boolean current = false; //used only to display the "current" cell algorithm is working on with another color
+
     public boolean visited = false; //used for recursive maze-generator
                                     //this additional boolean var is required because in generator a cell can be both visited
                                     //and a wall

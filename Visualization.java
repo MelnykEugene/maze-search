@@ -3,18 +3,19 @@ import javax.swing.JFrame;
 import java.awt.*;
 public class Visualization extends JPanel {
 
-    String generateMethod;  // how to regenerate maze
-    String solveMethod;     // how to solve maze
     int IMAGEWIDTH=1680;         // width of the canvas
     int IMAGEHEIGHT=1000;        // height of the canvas
-    Maze _maze;
+
+    Maze _maze;                  // local copy of maze to display
+
     int height;
     int width;
+
     int CellPixelSize;
 
     //selects color to paint a certain cell with
     private Color chooseColor(Cell cello){
-        //if yellow shows than something is not handled
+        //if yellow shows then something is not handled correctly
         Color result = Color.YELLOW;
         if (cello.type==0) result= Color.WHITE;
         if (cello.type==1) result= new Color(70,70,200,200);
@@ -27,19 +28,14 @@ public class Visualization extends JPanel {
         return result;
     }
 
-    public  void displayMaze(Maze maze){
-
+    public Visualization(Maze maze){
         _maze = maze;
         height=_maze.getHeight();
         width=_maze.getWidth();
+        //constructor calculates the pixel size of one cell on screen based on the amount of cells to display
         CellPixelSize = Math.min(IMAGEHEIGHT/height,IMAGEWIDTH/width);
-        CellPixelSize=Math.min(CellPixelSize,40);
-        this.repaint();
-    }
-    public Visualization(Maze maze) {
-        //_maze = maze;
-        //int height = _maze.getHeight();
-        //int width = _maze.getWidth();
+        CellPixelSize = Math.min(CellPixelSize,40);
+
         this.setPreferredSize(new Dimension(IMAGEWIDTH, IMAGEHEIGHT));
         JFrame frame = new JFrame("maze search");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -48,7 +44,20 @@ public class Visualization extends JPanel {
         frame.setVisible(true);
     }
 
-    private void display(Graphics g) {
+    //what gets called from outside the class
+    //basically re-runs code in paintComponent
+    public void displayMaze(Maze maze){
+        _maze = maze;
+        height=_maze.getHeight();
+        width=_maze.getWidth();
+        this.repaint();
+    }
+
+    //opening up the gui window
+
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
         // clear screen
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, IMAGEWIDTH, IMAGEHEIGHT);
@@ -64,15 +73,6 @@ public class Visualization extends JPanel {
                 g.fillRect(initx, inity, CellPixelSize, CellPixelSize);
             }
         }
-    }
-
-    public void shownew(Maze maze) {
-        this.repaint();
-    }
-
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        display(g);
     }
 
 }
