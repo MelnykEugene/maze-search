@@ -66,15 +66,17 @@ public class DFS extends SearchAlgorithm implements AbleToSearch{
             catch(InterruptedException e){}
 
             current.current=false;
-            System.out.println("Step: "+solutionLength);
         }
 
     }
     public void drawSolution(){
+        //at this point stack contains the solution
         for (Cell cell : stack){
             cell.type=2;
         }
         runWorld(viz);
+        System.out.println(solutionLength);
+
     }
     public void runWorld(Visualization viz){
         viz.displayMaze(maze);

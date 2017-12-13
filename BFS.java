@@ -97,6 +97,8 @@ public class BFS extends SearchAlgorithm implements AbleToSearch{
             catch(InterruptedException e){}
             runWorld(viz);
         }
+        System.out.println(solutionLength);
+
 
     }
     public void runWorld(Visualization viz){
