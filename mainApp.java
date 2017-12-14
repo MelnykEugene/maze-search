@@ -34,6 +34,9 @@ public class mainApp extends JFrame {
         //System.out.println("Example => recursive 30 40 Dijkstra 8");
     }
 
+    //This thing considers various combinations of input paramaters and sets up maze/visualization/solvers apporopriately
+    //inappropriate input (non-existent file/invalid algorithm/ wrong number of alrguments results in exception
+    //which we catch and display usage
     public static void main(String[] argv) throws FileNotFoundException {
         try {
 
