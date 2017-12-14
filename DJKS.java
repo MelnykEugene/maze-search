@@ -1,10 +1,14 @@
 // Algorithm from wikipedia
 // Code by us
-/*
+
+import javafx.scene.layout.Priority;
+import sun.misc.Queue;
+
 import java.util.*;
 import java.util.Collections.*;
+import java.util.function.DoubleBinaryOperator;
 
-public class BFS extends SearchAlgorithm implements AbleToSearch{
+public class DJKS extends SearchAlgorithm implements AbleToSearch{
     //stores open cells, the ones which will be called on further iterations
     LinkedList<Cell> open = new LinkedList<Cell>();
 
@@ -14,70 +18,103 @@ public class BFS extends SearchAlgorithm implements AbleToSearch{
     //stores Cell - (previus cell) data to construct the path after search is concluded
     ArrayList<Tuple<Cell,Cell>> map = new ArrayList<Tuple<Cell,Cell>>();
 
-    public BFS(Maze maze, Visualization pviz){
-        super(maze);
+    public DJKS(Maze maze, Visualization pviz){
+        super(maze,pviz);
         this.viz = pviz;
     }
-    public void Search(Cell start,int wait){
-        solutionLength=1;
-        open.add(start);
-        while (!open.isEmpty()){
-            solutionLength+=1;
-            Cell current = open.remove();
-            current.current=true;
-            if(!closed.contains(current)) closed.add(current);
+    public void Search(Cell start,int wait) {
+        solutionLength = 1;
+
+        // our cell-distance dictionary
+        HashMap<Cell, Double> dist = new HashMap<Cell, Double>();
+
+        // our cell-previouscell dictionary
+        HashMap<Cell, Cell> prev = new HashMap<Cell, Cell>();
+
+        //our priority que of tuples(priority,cell)
+        //priority comparator is based on priority of cell
+        LinkedList<Cell> que = new LinkedList<Cell>();
+
+        for (int x = 0; x < maze.getWidth(); x++) {
+            for (int y = 0; y < maze.getHeight(); y++) {
+                Cell cell = maze.getCell(new Coordinates(x, y));
+                if (x != maze.start.x || y != maze.start.y) {
+                    dist.put(cell, Double.POSITIVE_INFINITY);
+                    prev.put(cell, null);
+                }
+                que.add(cell);
+            }
+        }
+        dist.put(maze.getCell(maze.start),0.0);
+
+        while (!que.isEmpty()) {
+            Cell current=null;
+            for (Cell cell:que){
+                double min = Double.POSITIVE_INFINITY;
+                if (dist.get(cell)<min){
+                    current=cell;
+                    min = dist.get(cell);
+                }
+            }
+
+            que.remove(current);
             current.type=8;
 
-            if (current.coords.x==maze.finish.x && current.coords.y == maze.finish.y){
-                ConstructPath(wait);
+            if (current.coords.x == maze.finish.x && current.coords.y == maze.finish.y) {
+                drawSolution(prev,wait);
+                System.out.println("gucci");
                 return;
             }
 
-            ArrayList<Cell> potentials=new ArrayList<>();
-
-            if (current.coords.y>0 && !closed.contains(maze.getCell(new Coordinates(current.coords.x,current.coords.y-1))) && maze.getCell(new Coordinates(current.coords.x,current.coords.y-1)).type!=1) {
-                if (!open.contains(maze.getCell(new Coordinates(current.coords.x,current.coords.y-1)))) open.add(maze.getCell(new Coordinates(current.coords.x,current.coords.y-1)));
-                maze.getCell(new Coordinates(current.coords.x,current.coords.y-1)).type=6;
-                map.add(new Tuple<>(maze.getCell(new Coordinates(current.coords.x,current.coords.y-1)),current));
-
+            if (current.coords.y > 0 && maze.getCell(new Coordinates(current.coords.x, current.coords.y - 1)).type != 1) {
+                Cell neighbourv = maze.getCell(new Coordinates(current.coords.x, current.coords.y - 1));
+                Double alt = dist.get(current) + 1;
+                if (alt < dist.get(neighbourv)) {
+                    dist.put(neighbourv, alt);
+                    prev.put(neighbourv, current);
+                                   }
             }
-            if (current.coords.x>0 && !closed.contains(maze.getCell(new Coordinates(current.coords.x-1,current.coords.y)))&& maze.getCell(new Coordinates(current.coords.x-1,current.coords.y)).type!=1) {
-                if (!open.contains(maze.getCell(new Coordinates(current.coords.x-1,current.coords.y)))) open.add(maze.getCell(new Coordinates(current.coords.x-1,current.coords.y)));
-                maze.getCell(new Coordinates(current.coords.x-1,current.coords.y)).type=6;
-                map.add(new Tuple<>(maze.getCell(new Coordinates(current.coords.x-1,current.coords.y)),current));
-
+            if (current.coords.x > 0 && maze.getCell(new Coordinates(current.coords.x - 1, current.coords.y)).type != 1) {
+                Cell neighbourv = maze.getCell(new Coordinates(current.coords.x-1, current.coords.y ));
+                Double alt = dist.get(current) + 1;
+                if (alt < dist.get(neighbourv)) {
+                    dist.put(neighbourv, alt);
+                    prev.put(neighbourv, current);
+                }
             }
-            if (current.coords.y<maze.getHeight()-1 && !closed.contains(maze.getCell(new Coordinates(current.coords.x,current.coords.y+1)))&& maze.getCell(new Coordinates(current.coords.x,current.coords.y+1)).type!=1) {
-                if (!open.contains(maze.getCell(new Coordinates(current.coords.x,current.coords.y+1)))) open.add(maze.getCell(new Coordinates(current.coords.x,current.coords.y+1)));
-                maze.getCell(new Coordinates(current.coords.x,current.coords.y+1)).type=6;
-                map.add(new Tuple<>(maze.getCell(new Coordinates(current.coords.x,current.coords.y+1)),current));
-
-            }
-            if (current.coords.x<maze.getWidth()-1 && !closed.contains(maze.getCell(new Coordinates(current.coords.x+1,current.coords.y))) && maze.getCell(new Coordinates(current.coords.x+1,current.coords.y)).type!=1) {
-                if (!open.contains(maze.getCell(new Coordinates(current.coords.x+1,current.coords.y)))) open.add(maze.getCell(new Coordinates(current.coords.x+1,current.coords.y)));
-                maze.getCell(new Coordinates(current.coords.x+1,current.coords.y)).type=6;
-                map.add(new Tuple<>(maze.getCell(new Coordinates(current.coords.x+1,current.coords.y)),current));
+            if (current.coords.y < maze.getHeight() - 1 && maze.getCell(new Coordinates(current.coords.x, current.coords.y + 1)).type != 1) {
+                Cell neighbourv = maze.getCell(new Coordinates(current.coords.x, current.coords.y + 1));
+                Double alt = dist.get(current) + 1;
+                if (alt < dist.get(neighbourv)) {
+                    dist.put(neighbourv, alt);
+                    prev.put(neighbourv, current);
+                }
             }
 
-            runWorld(viz);
+            if (current.coords.x < maze.getWidth() - 1 && maze.getCell(new Coordinates(current.coords.x + 1, current.coords.y)).type != 1) {
+                Cell neighbourv = maze.getCell(new Coordinates(current.coords.x+1, current.coords.y));
+                Double alt = dist.get(current) + 1;
+                if (alt < dist.get(neighbourv)) {
+                    dist.put(neighbourv, alt);
+                    prev.put(neighbourv, current);
+                }
+            }
             try{
                 Thread.sleep(wait,1);
             }
-
             catch(InterruptedException e){}
-            current.current=false;
+            runWorld(viz);
         }
     }
-    public void ConstructPath(int wait){
+
+    public void drawSolution(HashMap<Cell, Cell> prev,int wait){
         ArrayList<Cell> path = new ArrayList<Cell>();
-        Cell current = maze.getCell(maze.finish);
-        while ((current.coords.x!=maze.start.x) || (current.coords.y!=maze.start.y)){
+        Cell current=maze.getCell(maze.finish);
+        while(prev.get(current)!=null){
             path.add(current);
-            for(Tuple<Cell,Cell> tuple :map ){
-                if (tuple.k==current) current=tuple.v;
-            }
+            current = prev.get(current);
         }
-        path.add(maze.getCell(maze.start));
+        path.add(maze.getCell(maze.finish));
 
         for(Cell cell : path){
             cell.type=2;
@@ -87,10 +124,8 @@ public class BFS extends SearchAlgorithm implements AbleToSearch{
             catch(InterruptedException e){}
             runWorld(viz);
         }
-
     }
     public void runWorld(Visualization viz){
         viz.displayMaze(maze);
     }
 }
-*/

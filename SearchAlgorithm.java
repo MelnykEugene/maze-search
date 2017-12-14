@@ -20,8 +20,9 @@ public class SearchAlgorithm {
      */
     Visualization viz;
 
-    public SearchAlgorithm(Maze pmaze){
+    public SearchAlgorithm(Maze pmaze, Visualization viz){
         this.maze = pmaze;
+        this.viz=viz;
         solutionLength = 0;
         timeStarted = System.currentTimeMillis();
     }
@@ -32,6 +33,7 @@ public class SearchAlgorithm {
         return solutionLength;
     }
     public long getTimeRequired(){ return timeStarted; }
+    public void Search(Cell a, int i){}
 }
 
 interface AbleToSearch {
