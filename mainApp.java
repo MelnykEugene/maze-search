@@ -16,33 +16,16 @@ public class mainApp extends JFrame {
     private JList list1;
     private JButton runMazeButton;
 
-    public static void main(String[] argv) throws FileNotFoundException {
-        System.out.println("USAGE:");
-        System.out.println("Name of file | Type of solver | Delay time between frames in ms(Not necessary)");
-        //System.out.println("Example => spanishinquisition.txt BFS 3");
-        System.out.println("random | Width | Height | Type of solver | Delay time between in ms(Not necessary)");
-        //System.out.println("Example => random 20 30 DFS");
-        System.out.println("recursive | Width | Height | Type of solver | Delay time between frames in ms(Not necessary)");
-        //System.out.println("Example => recursive 30 40 Dijkstra 8");
-
-        if (argv[0] == "random") {
-            Maze maze = new Maze(Integer.parseInt(argv[1]),Integer.parseInt(argv[2]));
-            Visualization viz =new Visualization(maze);
-            if()
-        }
-    }
-}
-    /*public static void ProgramStarter(Maze maze, SearchAlgorithm solver, int viewtime) {
-        solver.Search(maze.getCell(maze.start), viewtime);
-        System.out.println("FUCK YOU?");
+    //these two methods actually start the search after maze/vizualization/solver were set
+    public static void ProgramStarter(Maze maze, SearchAlgorithm solver, int viewtime) {
+        solver.Search(maze.getCell(maze.start),viewtime);
     }
     public static void ProgramStarter(Maze maze, SearchAlgorithm solver) {
-        solver.Search(maze.getCell(maze.start), 20);
+        solver.Search(maze.getCell(maze.start),0);
     }
 
-
+    //displays usage information when incorrect input is given
     public static void usage() {
-        System.out.println("USAGE:");
         System.out.println("Name of file | Type of solver | Delay time between frames in ms(Not necessary)");
         //System.out.println("Example => spanishinquisition.txt BFS 3");
         System.out.println("random | Width | Height | Type of solver | Delay time between in ms(Not necessary)");
@@ -53,96 +36,177 @@ public class mainApp extends JFrame {
 
     public static void main(String[] argv) throws FileNotFoundException {
         try {
-            if (argv[0] == "random") {
+
+            if (argv[0].equals("random")) {
                 Maze maze = new Maze(Integer.parseInt(argv[1]), Integer.parseInt(argv[2]));
                 maze.generateRandom();
-                Visualization viz = new Visualization(maze);
-                SearchAlgorithm alg = new SearchAlgorithm(maze, viz);
-                if (argv.length == 5) {
-                    if (argv[3] == "BFS")
-                        alg = new BFS(maze, viz);
-                    else if (argv[3] == "DFS")
-                        alg = new DFS(maze, viz);
-                    else if (argv[3] == "Dijkstra")
-                        alg = new DJKS(maze, viz);
-                    ProgramStarter(maze, alg, Integer.parseInt(argv[4]));
-                } else {
-                    maze.generateRandom();
-                    if (argv[3] == "BFS")
-                        alg = new BFS(maze, viz);
-                    else if (argv[3] == "DFS")
-                        alg = new DFS(maze, viz);
-                    else if (argv[3] == "Dijkstra")
-                        alg = new DJKS(maze, viz);
-                    ProgramStarter(maze, alg, 20);
+
+                if (argv.length == 5)
+                {
+
+                    if (argv[3].equals("BFS")) {
+                        Visualization viz = new Visualization(maze);
+                        BFS alg = new BFS(maze, viz);
+                        ProgramStarter(maze, alg, Integer.parseInt(argv[4]));
+                    }
+
+                    else if (argv[3].equals( "DFS")) {
+                        Visualization viz = new Visualization(maze);
+                        DFS alg = new DFS(maze, viz);
+                        ProgramStarter(maze, alg, Integer.parseInt(argv[4]));
+                    }
+
+                    else if (argv[3].equals("Dijkstra")) {
+                        Visualization viz = new Visualization(maze);
+                        DJKS alg = new DJKS(maze, viz);
+                        ProgramStarter(maze, alg, Integer.parseInt(argv[4]));
+                    }
+
+                    else throw new Exception("invalid algorithm");
+
+                } else if(argv.length==4)
+                {
+                    if (argv[3].equals("BFS"))
+                    {
+                        Visualization viz = new Visualization(maze);
+                        BFS alg = new BFS(maze, viz);
+                        ProgramStarter(maze, alg);
+                    }
+
+                    else if (argv[3].equals("DFS"))
+                    {
+                        Visualization viz = new Visualization(maze);
+                        DFS alg = new DFS(maze, viz);
+                        ProgramStarter(maze, alg);
+                    }
+
+                    else if (argv[3].equals("Dijkstra"))
+                    {
+                        Visualization viz = new Visualization(maze);
+                        DJKS alg = new DJKS(maze, viz);
+                        ProgramStarter(maze, alg);
+                    }
+
+                    else throw new Exception("invalid algorithm");
                 }
-            } else if (argv[0] == "recursive") {
+                else throw new Exception("invalid input");
+
+            } else if (argv[0].equals("recursive"))
+            {
                 Maze maze = new Maze(Integer.parseInt(argv[1]), Integer.parseInt(argv[2]));
-                Visualization viz = new Visualization(maze);
-                maze.generateRecursiveBacktracker(viz, Integer.parseInt(argv[4]));
-                SearchAlgorithm alg = new SearchAlgorithm(maze, viz);
-                if (argv.length == 5) {
-                    if (argv[3] == "BFS")
-                        alg = new BFS(maze, viz);
-                    else if (argv[3] == "DFS")
-                        alg = new DFS(maze, viz);
-                    else if (argv[3] == "Dijkstra")
-                        alg = new DJKS(maze, viz);
-                    ProgramStarter(maze, alg, Integer.parseInt(argv[4]));
-                } else {
-                    maze.generateRecursiveBacktracker(viz, 2);
-                    if (argv[3] == "BFS")
-                        alg = new BFS(maze, viz);
-                    else if (argv[3] == "DFS")
-                        alg = new DFS(maze, viz);
-                    else if (argv[3] == "Dijkstra")
-                        alg = new DJKS(maze, viz);
-                    ProgramStarter(maze, alg, 2);
+                if (argv.length == 5)
+                {
+                    if (argv[3].equals("BFS")){
+                        Visualization viz = new Visualization(maze);
+                        maze.generateRecursiveBacktracker(viz, Integer.parseInt(argv[4]));
+                        BFS alg = new BFS(maze, viz);
+                        ProgramStarter(maze, alg,Integer.parseInt(argv[4]));
+                    }
+
+                    else if (argv[3].equals("DFS"))
+                    {
+                        Visualization viz = new Visualization(maze);
+                        maze.generateRecursiveBacktracker(viz, Integer.parseInt(argv[4]));
+                        DFS alg = new DFS(maze, viz);
+                        ProgramStarter(maze, alg,Integer.parseInt(argv[4]));
+                    }
+
+                    else if (argv[3].equals("Dijkstra"))
+                    {
+                        Visualization viz = new Visualization(maze);
+                        maze.generateRecursiveBacktracker(viz, Integer.parseInt(argv[4]));
+                        DJKS alg = new DJKS(maze, viz);
+                        ProgramStarter(maze, alg,Integer.parseInt(argv[4]));
+                    }
+
+                    else throw new Exception("invalid algorithm");
+
+                } else if(argv.length==4) {
+                    if (argv[3].equals("BFS"))
+                    {
+                        Visualization viz = new Visualization(maze);
+                        maze.generateRecursiveBacktracker(viz, 2);
+                        BFS alg = new BFS(maze, viz);
+                        ProgramStarter(maze, alg);
+                    }
+
+                    else if (argv[3] .equals("DFS"))
+                    {
+                        Visualization viz = new Visualization(maze);
+                        maze.generateRecursiveBacktracker(viz, 2);
+                        DFS alg = new DFS(maze, viz);
+                        ProgramStarter(maze, alg);
+                    }
+
+                    else if (argv[3].equals("Dijkstra")){
+                        Visualization viz = new Visualization(maze);
+                        maze.generateRecursiveBacktracker(viz, 2);
+                        DJKS alg = new DJKS(maze, viz);
+                        ProgramStarter(maze, alg);
+                    }
+
+                    else throw new Exception("invalid algorithm");
                 }
-            } else {
+                else throw new Exception("invalid input");
+            } else
+                {
                 Maze maze = new Maze(argv[0]);
-                if (argv.length == 3) {
-                    if (argv[1] == "BFS") {
+                if (argv.length == 3)
+                {
+                    if (argv[1].equals("BFS"))
+                    {
                         Visualization viz = new Visualization(maze);
                         BFS alg = new BFS(maze, viz);
                         ProgramStarter(maze, alg, Integer.parseInt(argv[2]));
                     }
-                    else if (argv[1] == "DFS") {
+
+                    else if (argv[1].equals("DFS"))
+                    {
                         Visualization viz = new Visualization(maze);
                         DFS alg = new DFS(maze, viz);
                         ProgramStarter(maze, alg, Integer.parseInt(argv[2]));
                     }
-                    else if (argv[1] == "Dijkstra") {
+
+                    else if (argv[1].equals("Dijkstra"))
+                    {
                         Visualization viz = new Visualization(maze);
                         DJKS alg = new DJKS(maze, viz);
                         ProgramStarter(maze, alg, Integer.parseInt(argv[2]));
                     }
-                } else if(argv.length==2) {
-                    if (argv[1] == "BFS") {
+
+                    else throw new RuntimeException("invalid input");
+
+                } else if(argv.length==2)
+                {
+                    if (argv[1].equals("BFS")) {
                         Visualization viz = new Visualization(maze);
                         BFS alg = new BFS(maze, viz);
                         ProgramStarter(maze, alg);
                     }
-                    else if (argv[1] == "DFS")
+
+                    else if (argv[1].equals("DFS"))
                     {
                         Visualization viz = new Visualization(maze);
                         DJKS alg = new DJKS(maze, viz);
                         ProgramStarter(maze, alg);
                     }
-                    else if (argv[1] == "Dijkstra")
+
+                    else if (argv[1].equals("Dijkstra"))
                     {
                         Visualization viz = new Visualization(maze);
                         DJKS alg = new DJKS(maze, viz);
                         ProgramStarter(maze, alg);
                     }
+
+                    else {throw new Exception("invalid algorithm");}
                 }
-                else throw new RuntimeException("wrong input");
+                else throw new RuntimeException("invalid input");
             }
         } catch (Exception e) {
             usage();
         }
     }
-}*/
+}
 
 /*
 

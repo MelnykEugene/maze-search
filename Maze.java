@@ -110,6 +110,9 @@ public class Maze
 
             ArrayList<Cell> potentialNeighbours=new ArrayList<>();
             ArrayList<Cell> potentialFarNeighbours=new ArrayList<>();
+
+            //consider the two far (with a gap of one cell) neighbours from current
+            //potentially destroying a wall between current and far neighbour
             if(current.coords.y>1 && !this.getCell(new Coordinates(current.coords.x,current.coords.y-2)).visited){
                 Cell cell = this.getCell(new Coordinates(current.coords.x,current.coords.y-1));
                 potentialNeighbours.add(cell);
@@ -135,6 +138,7 @@ public class Maze
                 potentialFarNeighbours.add(cell);
             }
 
+            //if there are potential neighbours - pick one at random and move to that cell as current while removing walls
             if (!(potentialNeighbours.size()==0)){
                 Random rand=new Random();
                 int index = rand.nextInt(potentialNeighbours.size());

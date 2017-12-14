@@ -9,12 +9,6 @@ import java.util.Collections.*;
 import java.util.function.DoubleBinaryOperator;
 
 public class DJKS extends SearchAlgorithm implements AbleToSearch{
-    //stores open cells, the ones which will be called on further iterations
-    LinkedList<Cell> open = new LinkedList<Cell>();
-
-    //stores closed cells, the ones which we do not want to ever call again
-    ArrayList<Cell> closed = new ArrayList<>();
-
     //stores Cell - (previus cell) data to construct the path after search is concluded
     ArrayList<Tuple<Cell,Cell>> map = new ArrayList<Tuple<Cell,Cell>>();
 
@@ -45,9 +39,13 @@ public class DJKS extends SearchAlgorithm implements AbleToSearch{
                 que.add(cell);
             }
         }
+
+        //put origin into que
         dist.put(maze.getCell(maze.start),0.0);
 
+        //assign all cells initial distance and previous
         while (!que.isEmpty()) {
+            solutionLength+=1;
             Cell current=null;
             for (Cell cell:que){
                 double min = Double.POSITIVE_INFINITY;
@@ -57,15 +55,18 @@ public class DJKS extends SearchAlgorithm implements AbleToSearch{
                 }
             }
 
+            //be done with currently dequed cell and mark it as such (8 = visited)
             que.remove(current);
             current.type=8;
 
+            //if at target - return solution
             if (current.coords.x == maze.finish.x && current.coords.y == maze.finish.y) {
                 drawSolution(prev,wait);
-                System.out.println("gucci");
                 return;
             }
 
+
+            //Following four blocks consider the neighbours of current cell
             if (current.coords.y > 0 && maze.getCell(new Coordinates(current.coords.x, current.coords.y - 1)).type != 1) {
                 Cell neighbourv = maze.getCell(new Coordinates(current.coords.x, current.coords.y - 1));
                 Double alt = dist.get(current) + 1;
@@ -124,6 +125,7 @@ public class DJKS extends SearchAlgorithm implements AbleToSearch{
             catch(InterruptedException e){}
             runWorld(viz);
         }
+        System.out.println(solutionLength);
     }
     public void runWorld(Visualization viz){
         viz.displayMaze(maze);

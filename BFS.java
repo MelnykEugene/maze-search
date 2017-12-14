@@ -88,6 +88,8 @@ public class BFS extends SearchAlgorithm implements AbleToSearch{
     public void ConstructPath(int wait){
         ArrayList<Cell> path = new ArrayList<Cell>();
         Cell current = maze.getCell(maze.finish);
+
+        //this loop implements reverse-pathing from target back to source and adds cells on the way to path that we draw
         while ((current.coords.x!=maze.start.x) || (current.coords.y!=maze.start.y)){
             path.add(current);
             for(Tuple<Cell,Cell> tuple :map ){
@@ -96,6 +98,7 @@ public class BFS extends SearchAlgorithm implements AbleToSearch{
         }
         path.add(maze.getCell(maze.start));
 
+        //draw the path
         for(Cell cell : path){
             cell.type=2;
             try{

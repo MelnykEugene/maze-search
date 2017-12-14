@@ -11,7 +11,6 @@ value of type corresponds to logic states of the cell:
 6-open (will be further called)
 7-in stack (deemed as part of path)
 8-visited (but no longer a part of stack)
-
  */
 
 class Cell{
@@ -27,9 +26,12 @@ class Cell{
 
     public boolean current = false; //used only to display the "current" cell algorithm is working on with another color
 
+
     public boolean visited = false; //used for recursive maze-generator
                                     //this additional boolean var is required because in generator a cell can be both visited
                                     //and a wall
+
+
     public Cell(int ptype, Coordinates pcoords){
         this.type=ptype;
         this.coords=pcoords;
